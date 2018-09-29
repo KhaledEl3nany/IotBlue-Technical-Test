@@ -1,7 +1,9 @@
-package com.assem.tests.iotblue;
+package com.assem.tests.iotblue.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.assem.tests.iotblue.R;
 
 public class MainActivity extends AppCompatActivity {
 
