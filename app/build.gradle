@@ -51,6 +51,12 @@ dependencies {
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     // ShapeOfView
     implementation 'com.github.florent37:shapeofview:1.2.0'
+    // Dexter permissions
+    implementation 'com.karumi:dexter:5.0.0'
+    // Maps
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
