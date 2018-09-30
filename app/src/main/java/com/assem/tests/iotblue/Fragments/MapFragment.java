@@ -3,6 +3,7 @@ package com.assem.tests.iotblue.Fragments;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -86,20 +87,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mMap = googleMap;
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         if (handlePermissions()) {
+            Toast.makeText(getContext(), R.string.how_to_add, Toast.LENGTH_LONG).show();
             mapUtil = new MapUtil();
             getDeviceLocation();
-        }
-        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                setupAddBookmarkDialog(new PlaceBookmarkModel(latLng.latitude, latLng.longitude, getString(R.string.bookmark)));
+            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
             }
-        });
-        getPlaceToBookmarks(mMap);
+            mMap.setMyLocationEnabled(true);
+            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    setupAddBookmarkDialog(new PlaceBookmarkModel(latLng.latitude, latLng.longitude, getString(R.string.bookmark)));
+                }
+            });
+            getPlaceToBookmarks(mMap);
+        } else {
+            Toast.makeText(getContext(), R.string.need_to_add_permissions, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initMap() {
@@ -153,10 +157,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private boolean handlePermissions() {
-        List<String> permissions = new ArrayList<>();
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        return new PermissionUtil().requestPermissions(getActivity(), permissions);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission
+                    (Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                }, 1); // 1 is requestCode
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), R.string.need_to_add_permissions, Toast.LENGTH_LONG).show();
+                } else {
+//                    Toast.makeText(getContext(), "PERMISSION_GRANTED", Toast.LENGTH_SHORT).show();
+                    // permission granted do something
+                    initMap();
+                }
+                break;
+        }
     }
 
     @Override
