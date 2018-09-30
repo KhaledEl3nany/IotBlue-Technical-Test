@@ -82,8 +82,8 @@ public class BookmarksFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 PlaceBookmarkModel placeBookmarkModel = dataSnapshot.getValue(PlaceBookmarkModel.class);
                 placeBookmarkModelArrayList.add(placeBookmarkModel);
-                placesBookmarkAdapter.notifyDataSetChanged();
                 Collections.reverse(placeBookmarkModelArrayList);
+                placesBookmarkAdapter.notifyDataSetChanged();
                 toggleLayout(true);
             }
 
@@ -109,6 +109,7 @@ public class BookmarksFragment extends Fragment {
                 Toast.makeText(getContext(), R.string.error_getting_data, Toast.LENGTH_LONG).show();
             }
         });
+        bookmarksRecyclerView.setAdapter(placesBookmarkAdapter);
     }
 
     private void init() {
@@ -116,7 +117,6 @@ public class BookmarksFragment extends Fragment {
         mRef = FirebaseDatabase.getInstance().getReference();
         placeBookmarkModelArrayList = new ArrayList<>();
         placesBookmarkAdapter = new PlacesBookmarkAdapter(getContext(), placeBookmarkModelArrayList);
-        bookmarksRecyclerView.setAdapter(placesBookmarkAdapter);
         new ViewsUtils().setupLinearVerticalRecView(getContext(), bookmarksRecyclerView);
     }
 
