@@ -22,4 +22,6 @@
     <string name="how_to_add">Long click on map to add place to bookmark</string>
     <string name="not_supported">Your device can\'t run this app - Update google play services</string>
     <string name="need_to_add_permissions">Add permission manually so, app can work  well</string>
+    <string name="remove_bookmark">Are you sure you want to remove bookmark?</string>
+    <string name="remove">Remove</string>
 </resources>

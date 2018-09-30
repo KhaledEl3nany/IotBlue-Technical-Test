@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class PlaceBookmarkModel implements Serializable {
 
+    private String uid;
     private double lat;
     private double lon;
     private String title;
@@ -11,10 +12,19 @@ public class PlaceBookmarkModel implements Serializable {
     public PlaceBookmarkModel() {
     }
 
-    public PlaceBookmarkModel(double lat, double lon, String title) {
+    public PlaceBookmarkModel(String uid, double lat, double lon, String title) {
+        this.uid = uid;
         this.lat = lat;
         this.lon = lon;
         this.title = title;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public double getLat() {
