@@ -11,7 +11,7 @@ public interface ApiInterface {
 
     @GET(".")
     Call<BookmarkModel> getBookmarkData(@Query(AppConfig.LAT) String lat,
-                                        @Query(AppConfig.LON) String lan,
+                                        @Query(AppConfig.LON) String lon,
                                         @Query(AppConfig.APP_ID) String appId,
                                         @Query(AppConfig.UNITS) String units);
 }
