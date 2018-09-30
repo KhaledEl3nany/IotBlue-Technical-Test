@@ -17,31 +17,26 @@
         android:id="@+id/activity_main_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/tab_bg"
-        android:paddingBottom="@dimen/margin_padding_size_small"
+        android:background="@color/colorPrimary"
         android:paddingTop="@dimen/margin_padding_size_small"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabGravity="fill"
-        app:tabIndicatorHeight="0dp"
+        app:tabGravity="center"
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabIndicatorHeight="2dp"
         app:tabMode="fixed"
         app:tabPaddingEnd="10dp"
         app:tabPaddingStart="10dp"
         app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/secondary_text" />
-
+        app:tabTextColor="@color/low_white" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/divider" />
-
+        android:layout_height="2dp"
+        android:background="@color/colorAccent" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_padding_size_micro"
         android:layout_weight="1">
-
 
         <android.support.v4.view.ViewPager
             android:id="@+id/activity_main_view_pager"
@@ -50,5 +45,4 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </FrameLayout>
-
 </LinearLayout>

@@ -1,12 +1,13 @@
 package com.assem.tests.iotblue.Activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,6 +25,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity
         implements ConnectivityReceiver.ConnectivityReceiverListener {
@@ -44,9 +47,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/pt_sans.ttf").setFontAttrId(R.attr.fontPath).build());
         init();
     }
-
 
     private void init() {
         if (checkGooglePlayServices()) {
@@ -94,6 +97,11 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "You can't make map request, update google play service version", Toast.LENGTH_LONG).show();
         }
         return false;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     /**
