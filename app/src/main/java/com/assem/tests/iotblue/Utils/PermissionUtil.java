@@ -1,5 +1,6 @@
 package com.assem.tests.iotblue.Utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 
@@ -13,10 +14,11 @@ import java.util.List;
 
 public class PermissionUtil {
 
-    public boolean requestPermissions(Activity activity, List<String> permissions) {
+    public boolean requestPermissions(Activity activity) {
         final boolean[] flag = {false};
         Dexter.withActivity(activity)
-                .withPermissions(permissions)
+                .withPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
