@@ -2,8 +2,8 @@
 
 
 * Used libraries and frameworks:
-* Retrofit
-Gson
+  - Retrofit
+  - Gson
 Firebase
 ButterKnife
 Google maps sdk
