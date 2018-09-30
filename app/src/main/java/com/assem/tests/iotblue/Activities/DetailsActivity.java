@@ -1,6 +1,7 @@
 package com.assem.tests.iotblue.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.assem.tests.iotblue.App.AppConfig;
 import com.assem.tests.iotblue.Models.BookmarkModel;
+import com.assem.tests.iotblue.Models.PlaceBookmarkModel;
 import com.assem.tests.iotblue.Networking.ApiClient;
 import com.assem.tests.iotblue.Networking.ApiInterface;
 import com.assem.tests.iotblue.R;
@@ -38,15 +40,23 @@ public class DetailsActivity extends AppCompatActivity {
     ContentLoadingProgressBar progressBar;
     @BindView(R.id.progress_layout)
     RelativeLayout progressLayout;
-    // Vars
-    String lat, lon;
+    @BindView(R.id.details_activity_city_name)
+    TextView cityNameTxt;
+    @BindView(R.id.details_activity_city_weather)
+    TextView weatherTxt;
+    @BindView(R.id.details_activity_temperature)
+    TextView temperatureTxt;
+    @BindView(R.id.details_activity_humidity)
+    TextView humidityTxt;
+    @BindView(R.id.details_activity_wind)
+    TextView windTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-
+        toggleLayout(false);
         // toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -63,6 +73,13 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<BookmarkModel> call, @NonNull Response<BookmarkModel> response) {
                 BookmarkModel bookmarkModel = response.body();
+                if (bookmarkModel != null) {
+                    cityNameTxt.setText(bookmarkModel.getName());
+                    weatherTxt.setText(bookmarkModel.getWeather().get(0).getDescription());
+                    temperatureTxt.setText(String.valueOf(bookmarkModel.getMain().getTemp()));
+                    humidityTxt.setText(String.valueOf(bookmarkModel.getMain().getHumidity()));
+                    windTxt.setText(String.valueOf(bookmarkModel.getWind().getSpeed()));
+                }
             }
 
             @Override
@@ -71,6 +88,7 @@ public class DetailsActivity extends AppCompatActivity {
                 Log.e(TAG, t.toString());
             }
         });
+        toggleLayout(true);
     }
 
     private void toggleLayout(boolean flag) {
@@ -87,7 +105,11 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_right);
-        getPlaceWeather(lat, lon);
+        Intent bundleIntent = getIntent();
+        PlaceBookmarkModel placeBookmarkModel = (PlaceBookmarkModel) bundleIntent.getSerializableExtra(AppConfig.PLACE_INTENT_KEY);
+        if (placeBookmarkModel != null) {
+            getPlaceWeather(String.valueOf(placeBookmarkModel.getLat()), String.valueOf(placeBookmarkModel.getLon()));
+        }
     }
 
     @Override

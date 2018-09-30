@@ -14,4 +14,12 @@
     <string name="error_adding">Error adding bookmark</string>
     <string name="added_successfully">Place is added successfully to bookmark</string>
     <string name="error_getting_data">Error getting data</string>
+    <string name="city">City</string>
+    <string name="temperature">Temperature</string>
+    <string name="wind">Wind speed</string>
+    <string name="humidity">Humidity</string>
+    <string name="weather">Weather</string>
+    <string name="how_to_add">Long click on map to add place to bookmark</string>
+    <string name="not_supported">Your device can\'t run this app - Update google play services</string>
+    <string name="need_to_add_permissions">Add permission manually so, app can work  well</string>
 </resources>
