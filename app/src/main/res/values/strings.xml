@@ -6,4 +6,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="map">Map</string>
     <string name="bookmarks">Bookmarks</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="add_to_bookmark">Add place to bookmark?</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="lorem">By adding place to bookmark you will be able to get this place weather info!</string>
+    <string name="error_adding">Error adding bookmark</string>
+    <string name="added_successfully">Place is added successfully to bookmark</string>
+    <string name="error_getting_data">Error getting data</string>
 </resources>
