@@ -58,7 +58,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     // Firebase
     private DatabaseReference mRef;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,7 +96,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
-                    setupAddBookmarkDialog(new PlaceBookmarkModel(latLng.latitude, latLng.longitude, getString(R.string.bookmark)));
+                    setupAddBookmarkDialog(latLng);
                 }
             });
             getPlaceToBookmarks(mMap);
@@ -192,7 +191,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 
-    private void setupAddBookmarkDialog(final PlaceBookmarkModel placeBookmarkModel) {
+    private void setupAddBookmarkDialog(final LatLng latLng) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         final View mView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_bookmark, null);
 
@@ -206,7 +205,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addPlaceToBookmark(placeBookmarkModel);
+                addPlaceToBookmark(latLng);
                 alertDialog.dismiss();
             }
         });
@@ -219,23 +218,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         });
     }
 
-    private void addPlaceToBookmark(final PlaceBookmarkModel placeBookmarkModel) {
+    private void addPlaceToBookmark(LatLng latLng) {
         String key = mRef.child(AppConfig.BOOKMARKS).push().getKey();
-        assert key != null;
-        mRef.child(AppConfig.BOOKMARKS).child(key).setValue(placeBookmarkModel)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), R.string.added_successfully, Toast.LENGTH_LONG).show();
-                        mapUtil.customMarker(getContext(), mMap, R.drawable.pin, getString(R.string.bookmark), new LatLng(placeBookmarkModel.getLat(), placeBookmarkModel.getLon()));
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), R.string.error_adding, Toast.LENGTH_LONG).show();
-                    }
-                });
+        if (key != null) {
+            final PlaceBookmarkModel placeBookmarkModel = new PlaceBookmarkModel(key, latLng.latitude, latLng.longitude, getString(R.string.bookmark));
+            mRef.child(AppConfig.BOOKMARKS).child(key).setValue(placeBookmarkModel)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getContext(), R.string.added_successfully, Toast.LENGTH_LONG).show();
+                            mapUtil.customMarker(getContext(), mMap, R.drawable.pin, getString(R.string.bookmark), new LatLng(placeBookmarkModel.getLat(), placeBookmarkModel.getLon()));
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(), R.string.error_adding, Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
     }
 
     private void getPlaceToBookmarks(final GoogleMap mMap) {
