@@ -2,7 +2,6 @@ package com.assem.tests.iotblue.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStructure;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -20,8 +18,6 @@ import com.assem.tests.iotblue.App.AppConfig;
 import com.assem.tests.iotblue.Models.PlaceBookmarkModel;
 import com.assem.tests.iotblue.R;
 import com.assem.tests.iotblue.Utils.ViewsUtils;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,8 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,34 +66,20 @@ public class BookmarksFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getBookmarks();
     }
 
     private void getBookmarks() {
-        placeBookmarkModelArrayList.clear();
-        mRef.child(AppConfig.BOOKMARKS).addChildEventListener(new ChildEventListener() {
+        mRef.child(AppConfig.BOOKMARKS).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                PlaceBookmarkModel placeBookmarkModel = dataSnapshot.getValue(PlaceBookmarkModel.class);
-                placeBookmarkModelArrayList.add(placeBookmarkModel);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                placeBookmarkModelArrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    PlaceBookmarkModel placeBookmarkModel = snapshot.getValue(PlaceBookmarkModel.class);
+                    placeBookmarkModelArrayList.add(placeBookmarkModel);
+                    placesBookmarkAdapter.notifyDataSetChanged();
+                }
                 Collections.reverse(placeBookmarkModelArrayList);
-                placesBookmarkAdapter.notifyDataSetChanged();
                 toggleLayout(true);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                placesBookmarkAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                placesBookmarkAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                placesBookmarkAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -118,8 +98,8 @@ public class BookmarksFragment extends Fragment {
         placeBookmarkModelArrayList = new ArrayList<>();
         placesBookmarkAdapter = new PlacesBookmarkAdapter(getContext(), placeBookmarkModelArrayList);
         new ViewsUtils().setupLinearVerticalRecView(getContext(), bookmarksRecyclerView);
+        getBookmarks();
     }
-
 
     private void toggleLayout(boolean flag) {
         if (flag) {
