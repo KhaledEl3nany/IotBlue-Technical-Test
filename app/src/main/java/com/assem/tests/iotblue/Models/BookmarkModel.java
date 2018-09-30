@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class BookmarkModel {
-    
     @SerializedName("weather")
     @Expose
     private List<WeatherModel> weather = null;
