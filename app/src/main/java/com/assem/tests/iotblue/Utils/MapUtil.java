@@ -40,6 +40,18 @@ public class MapUtil {
         mMap.addMarker(mMarkerOptions);
     }
 
+    public void customMarker(Context context, GoogleMap mMap, int drawable, String title, LatLng latLng) {
+        int height = 80;
+        int width = 80;
+        BitmapDrawable bitmapDraw = (BitmapDrawable) context.getResources().getDrawable(drawable);
+        Bitmap b = bitmapDraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        MarkerOptions mMarkerOptions = new MarkerOptions();
+        mMarkerOptions.title(title).position(latLng)
+                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+        mMap.addMarker(mMarkerOptions);
+    }
+
     public void animateCamera(GoogleMap mMap, Location location, float zoom) {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), zoom));
     }
