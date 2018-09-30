@@ -19,6 +19,7 @@ import com.assem.tests.iotblue.Fragments.BookmarksFragment;
 import com.assem.tests.iotblue.Fragments.MapFragment;
 import com.assem.tests.iotblue.R;
 import com.assem.tests.iotblue.Utils.ConnectivityReceiver;
+import com.assem.tests.iotblue.Utils.PermissionUtil;
 import com.assem.tests.iotblue.Utils.ViewsUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -52,12 +53,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
-        if (checkGooglePlayServices()) {
+//        if (checkGooglePlayServices()) {
+//        new PermissionUtil().requestPermissions(this);
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(new MapFragment(), getString(R.string.map));
             viewPagerAdapter.addFragment(new BookmarksFragment(), getString(R.string.bookmarks));
             new ViewsUtils().setupTabLayout(viewPager, viewPagerAdapter, tabLayout, 0);
-        }
+//        } else {
+//            Toast.makeText(this, R.string.not_supported, Toast.LENGTH_LONG).show();
+////            finish();
+//        }
     }
 
     @Override
